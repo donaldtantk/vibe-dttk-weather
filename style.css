@@ -15,14 +15,40 @@ body {
     margin: 0;
     padding: 0;
     background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%239C92AC' fill-opacity='0.1' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H0z'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: background-image 1s ease-in-out;
+    position: relative;
+}
+
+body.body-has-bg::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+}
+
+body.body-has-bg {
+    color: #ffffff;
 }
 
 header {
     background-color: var(--primary-color);
-    color: var(--background-color);
+    color: #ffffff;
     padding: 1.5rem;
     text-align: center;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.5s ease;
+}
+
+body.body-has-bg header {
+    background-color: transparent;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
 }
 
 h1 {
@@ -45,6 +71,22 @@ main {
     padding: 1rem;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: background-color 0.5s ease, box-shadow 0.5s ease;
+}
+
+body.body-has-bg .input-container {
+    background-color: rgba(44, 62, 80, 0.75);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+body.body-has-bg #location {
+    color: #ffffff;
+    background-color: rgba(255,255,255,0.2);
+    border-color: rgba(255,255,255,0.5);
+}
+
+body.body-has-bg #location::placeholder {
+  color: rgba(255, 255, 255, 0.7);
 }
 
 #location {
@@ -91,7 +133,6 @@ button:hover {
 
 weather-card {
     display: block;
-    background-color: var(--card-background);
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     overflow: hidden;
@@ -101,6 +142,14 @@ weather-card {
 weather-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+body.body-has-bg weather-card {
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+body.body-has-bg weather-card:hover {
+     box-shadow: 0 8px 20px rgba(0,0,0,0.4);
 }
 
 @media (max-width: 600px) {

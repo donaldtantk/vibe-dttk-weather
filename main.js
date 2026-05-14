@@ -24,6 +24,7 @@ class WeatherCard extends HTMLElement {
                     padding: 1rem;
                     text-align: center;
                     border-radius: 8px;
+                    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
                 }
                 .icon {
                     font-size: 4rem;
@@ -31,8 +32,11 @@ class WeatherCard extends HTMLElement {
                 p {
                     margin: 0.5rem 0;
                 }
+                .card.dark-text {
+                    color: #333;
+                }
             </style>
-            <div class="card">
+            <div class="card ${this.useDarkText(color) ? 'dark-text' : ''}">
                 <p><b>${date}</b></p>
                 <div class="icon">${icon}</div>
                 <p>${temperature}°C</p>
@@ -41,15 +45,22 @@ class WeatherCard extends HTMLElement {
         `;
     }
 
+    useDarkText(bgColor) {
+        // Simple check to see if the background is light enough to need dark text
+        const lightColors = ['#ecf0f1'];
+        return lightColors.includes(bgColor);
+    }
+
+
     getWeatherInfo(code) {
         if (code === 0) return { description: 'Clear sky', icon: '☀️', color: '#3498db' };
         if (code >= 1 && code <= 3) return { description: 'Partly cloudy', icon: '⛅️', color: '#95a5a6' };
         if (code === 45 || code === 48) return { description: 'Fog', icon: '🌫️', color: '#bdc3c7' };
-        if (code >= 51 && code <= 57) return { description: 'Drizzle', icon: '🌧️', color: '#3498db' };
+        if (code >= 51 && code <= 57) return { description: 'Drizzle', icon: '🌧️', color: '#5dade2' };
         if (code >= 61 && code <= 67) return { description: 'Rain', icon: '🌧️', color: '#2980b9' };
         if (code >= 71 && code <= 77) return { description: 'Snow', icon: '❄️', color: '#ecf0f1' };
         if (code >= 80 && code <= 82) return { description: 'Rain showers', icon: '🌦️', color: '#3498db' };
-        if (code >= 85 && code <= 86) return { description: 'Snow showers', icon: '🌨️', color: '#ecf0f1' };
+        if (code >= 85 && code <= 86) return { description: 'Snow showers', icon: '🌨️', color: '#a9cce3' };
         if (code >= 95 && code <= 99) return { description: 'Thunderstorm', icon: '⛈️', color: '#2c3e50' };
         return { description: 'Unknown', icon: '❓', color: '#7f8c8d' };
     }
@@ -74,6 +85,7 @@ detectLocationButton.addEventListener('click', () => {
                 .then(response => response.json())
                 .then(data => {
                     locationInput.value = data.city;
+                    getWeatherButton.click();
                 })
                 .catch(error => {
                     console.error('Error getting city name:', error);
@@ -86,6 +98,9 @@ getWeatherButton.addEventListener('click', () => {
     const location = locationInput.value;
     let startDate = startDateInput.value;
     let endDate = endDateInput.value;
+
+    document.body.style.backgroundImage = `url(https://source.unsplash.com/1600x900/?${location})`;
+    document.body.classList.add('body-has-bg');
 
     if (!startDate || !endDate) {
         const today = new Date();
@@ -127,4 +142,6 @@ resetButton.addEventListener('click', () => {
     startDateInput.value = '';
     endDateInput.value = '';
     weatherContainer.innerHTML = '';
+    document.body.style.backgroundImage = '';
+    document.body.classList.remove('body-has-bg');
 });
